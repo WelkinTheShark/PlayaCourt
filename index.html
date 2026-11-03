@@ -39,6 +39,13 @@ h1{font:700 clamp(56px,9vw,104px)/.92 var(--disp);letter-spacing:.06em;margin:14
 .btns{display:flex;flex-wrap:wrap;gap:12px}
 .btn{display:inline-block;font:700 18px/1 var(--disp);letter-spacing:.1em;text-transform:uppercase;text-decoration:none;padding:15px 22px;border-radius:999px;border:2px solid var(--gold);color:var(--gold)}
 .btn.primary{background:var(--gold);color:#1C1714}.btn:hover{filter:brightness(1.1)}
+/* Sign-up calls to action: luminous teal with a slow glow, so they stand apart from the gold buttons. */
+.btn.cta{background:linear-gradient(135deg,#7FF0E2,var(--teal) 55%,#22B3A4);color:#0B1F1D;border-color:transparent;font-size:20px;padding:17px 26px;animation:ctaglow 2.6s ease-in-out infinite;transition:transform .15s}
+.btn.cta::after{content:" \2192"}
+.btn.cta:hover,.btn.cta:focus-visible{transform:translateY(-2px);filter:brightness(1.08)}
+@keyframes ctaglow{0%,100%{box-shadow:0 0 0 0 rgba(63,217,200,.5),0 0 20px rgba(63,217,200,.3)}50%{box-shadow:0 0 0 9px rgba(63,217,200,0),0 0 36px rgba(63,217,200,.55)}}
+nav.top a.l.cta{color:#0B1F1D;background:var(--teal);padding:8px 14px;border-radius:999px;box-shadow:0 0 16px rgba(63,217,200,.4)}
+nav.top a.l.cta:hover{color:#0B1F1D;filter:brightness(1.1)}
 .herocards{--u:1px;position:relative;justify-self:center;width:calc(470*var(--u));height:calc(390*var(--u))}
 /* Six cards in two overlapping rows: the front row covers only the back row's rules text, so names and art show. */
 .herocards .hc{width:calc(162*var(--u))}
@@ -111,6 +118,13 @@ dl.kw dt{font:700 20px var(--disp);letter-spacing:.06em;color:var(--gold)}dl.kw 
 .gallery figcaption{font:600 16px var(--disp);letter-spacing:.06em;color:var(--muted);text-align:center;margin-top:10px}
 details{border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:0 0 10px;max-width:46em;background:rgba(244,236,221,.03)}
 summary{cursor:pointer;font:700 21px var(--disp);letter-spacing:.04em}details p{margin:10px 0 0}
+details.fold{border:0;border-radius:0;padding:0;margin:0;max-width:none;background:none}
+details.fold>summary{list-style:none;font:inherit;letter-spacing:normal}details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary .intro{margin:0 0 18px}
+.fold .more{display:inline-block;font:700 18px/1 var(--disp);letter-spacing:.1em;text-transform:uppercase;padding:13px 20px;border-radius:999px;border:2px solid var(--gold);color:var(--gold)}
+.fold .more::after{content:" \25BE"}.fold[open] .more::after{content:" \25B4"}
+.fold .c,.fold[open] .o{display:none}.fold[open] .c{display:inline}
+details.fold[open]>summary{margin-bottom:28px}
 footer{padding:40px 0 56px;color:var(--muted);font-size:16px}
 footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between}
 /* ---- cards: drawn at print size (750 x 1050) and scaled with --s ---- */
@@ -147,21 +161,21 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
 @media (max-width:520px){body{font-size:17px}.wrap{padding:0 16px}section{padding:52px 0}.cardwrap.big{--s:.42}.gallery{gap:20px 12px}.gallery .cardwrap{--s:.2}.gitem{width:150px}nav.top a.l{font-size:15px}dl.kw{grid-template-columns:1fr;gap:2px 0}dl.kw dd{margin-bottom:12px}}
 @media (max-width:600px){.stack thead{position:absolute;left:-9999px}.stack tr{display:block;border:1px solid var(--line);border-radius:12px;padding:6px 14px;margin:0 0 12px;background:rgba(244,236,221,.03)}
 .stack td{display:grid;grid-template-columns:96px 1fr;gap:10px;border:0;padding:6px 0}.stack td::before{content:attr(data-label);font:700 14px/1.6 var(--disp);letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn.cta{animation:none;box-shadow:0 0 24px rgba(63,217,200,.45);transition:none}}
 </style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <nav class="top" aria-label="Sections"><div class="wrap">
 <a class="brand" href="#top">PLAYA COURT</a>
-<a class="l" href="https://docs.google.com/forms/d/1iFV0dNY1aKpsGeerfGngpiqYUs7fclOhsiuBPd6YN6s/viewform" rel="noopener">Become a card</a><a class="l" href="#faq">FAQ</a><a class="l" href="#play">How to play</a><a class="l" href="#cards">Reading a card</a><a class="l" href="#example">Example</a>
+<a class="l" href="#faq">FAQ</a><a class="l" href="#play">How to play</a><a class="l" href="#cards">Reading a card</a><a class="l" href="#example">Example</a><a class="l" href="paddockmon.html">Paddockmon</a><a class="l cta" href="https://docs.google.com/forms/d/1iFV0dNY1aKpsGeerfGngpiqYUs7fclOhsiuBPd6YN6s/viewform" rel="noopener">Become a card</a>
 </div></nav>
 <header class="hero" id="top"><div class="wrap">
 <div>
 <div class="eyebrow">unSCruz 2027 · Luminous Mycelium</div>
 <h1>PLAYA<br>COURT</h1>
 <p class="lead">A gifted card game where every card is someone at unSCruz. Pick a card. Flip together. Make a friend.</p>
-<div class="btns"><a class="btn primary" href="https://docs.google.com/forms/d/1iFV0dNY1aKpsGeerfGngpiqYUs7fclOhsiuBPd6YN6s/viewform" rel="noopener">Become a card</a><a class="btn" href="#play">How to play</a></div>
+<div class="btns"><a class="btn cta" href="https://docs.google.com/forms/d/1iFV0dNY1aKpsGeerfGngpiqYUs7fclOhsiuBPd6YN6s/viewform" rel="noopener">Become a card</a><a class="btn" href="#play">How to play</a></div>
 </div>
 <div class="herocards">
 <img class="hc r1" src="art/Stu%20King.png" alt="Stu: King, power 7, [Build]. Aura: Your [Build] get +2." width="600" height="840" decoding="async">
@@ -183,7 +197,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
 <li><b>Send a photo.</b> It becomes your card's portrait.</li>
 <li><b>Change your mind any time</b> before the print deadline, and you're out.</li>
 </ol>
-<p style="margin-top:22px"><a class="btn primary" href="https://docs.google.com/forms/d/1iFV0dNY1aKpsGeerfGngpiqYUs7fclOhsiuBPd6YN6s/viewform" rel="noopener">Sign up</a></p>
+<p style="margin-top:22px"><a class="btn cta" href="https://docs.google.com/forms/d/1iFV0dNY1aKpsGeerfGngpiqYUs7fclOhsiuBPd6YN6s/viewform" rel="noopener">Sign up</a></p>
 </div>
 <div>
 <h3 style="margin-top:0">Leave No Trace</h3>
@@ -196,12 +210,15 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
 <h2>Questions</h2>
 <details><summary>Who can submit a card?</summary><p>Anyone participating in unSCruz 2027 can submit. Priority will be given to those who help with the event, bring art, or create theme camps.</p></details>
 <details><summary>How many cards do I need to play?</summary><p>5–6 is recommended (a standard match uses 6), but you can play with any amount! See <a href="#formats">Formats</a> for shorter and longer matches.</p></details>
-<details><summary>Can kids play?</summary><p>Yes, the game is all ages. Only adults appear on the cards.</p></details>
+<details><summary>Can kids play?</summary><p>Yes! Only those 18 or older can sign up for a card, but all ages can play. Parental guidance is recommended due to potential themes related to performance arts or camp gifts. Nothing sexual, gory or illegal will be depicted.</p></details>
+<details><summary>Has this been done before?</summary><p>Yes! Paddockmon was a card game art project at Ignition 2026, with 1,200 unique cards made from participants, memorable moments and camps. Playa Court follows on from it, and some people, like ISHYne and Jonny 5, are in both. <a href="paddockmon.html">See Paddockmon</a>.</p></details>
 <details><summary>Is this affiliated with unSCruz?</summary><p>Playa Court is an independent, participant-made project. It is not produced, sponsored or endorsed by unSCruz or Burning Man Project, and any names or marks belong to their owners.</p></details>
 </div></section>
 <section class="alt" id="play"><div class="wrap">
-<h2>How to play</h2>
+<details class="fold">
+<summary><h2>How to play</h2>
 <p class="intro">Two players, one table, about two minutes. The standard match is best of 5 rounds.</p>
+<span class="more"><span class="o">Show the rules</span><span class="c">Hide the rules</span></span></summary>
 <div class="need">
 <div><b>6 cards</b>One more than the number of rounds, so even the last round is a choice.</div>
 <div><b>5 tokens</b>Beads, bottle caps, anything. One per round, in a pile in the middle.</div>
@@ -233,9 +250,9 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
 <h3>Building your hand</h3>
 <ul>
 <li>One copy of any card name.</li>
-<li>Jokers are unlimited.</li>
 <li>Your hand is fixed: no drawing, no deck.</li>
 </ul>
+</details>
 </div></section>
 
 <section id="classes"><div class="wrap split">
@@ -362,6 +379,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
 
 <footer><div class="wrap">
 <span>Playa Court · a participant-made gift for unSCruz 2027</span>
+<span>Before this: <a href="paddockmon.html">Paddockmon</a> at Ignition 2026</span>
 <span>Made by Welkin · <a href="https://welkinarts.dev/">welkinarts.dev</a></span>
 </div></footer>
 
