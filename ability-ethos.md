@@ -94,6 +94,38 @@ A card gets **one or two** tags, read from the sign-up form.
 - **Wob:** poi → [Fire], The Fire Circle → [Fire] again, while time dilation and lifelong learning give no tag. Result: **[Fire]**.
 - **ISHYne:** joyful heart and smile → [Care], getting shit done → [Crew]. "Staff camping" isn't a camp, so ISHYne is a Rogue. Result: **[Care] [Crew]**, no camp.
 
+## 10. Elements and the deck (final pass)
+Once every card is in, each one also gets an **element** and a **rank**, so a set of Playa Court cards works as a deck of playing cards or the minor arcana of a tarot deck. This happens **last**: the person comes first, and their class, tags and ability are written from the form as usual. Elements don't change how Playa Court plays.
+
+**The four elements**
+The classic tarot pairing:
+
+| Element | Tarot suit | Playing-card suit | What it stands for | Tags that point to it |
+|---|---|---|---|---|
+| Fire | Wands | ♣ Clubs | Passion, energy, creativity, spark. The fire spinners and night owls. | [Fire], [Glow], [Night] |
+| Water | Cups | ♥ Hearts | Love, care, feelings, sharing. The hosts, cooks and huggers. | [Food], [Care] |
+| Air | Swords | ♠ Spades | Mind, voice, movement, change. The DJs, dancers and drivers. | [Sound], [Dance], [Vehicle] |
+| Earth | Pentacles | ♦ Diamonds | Craft, work, building, the material. The builders, crew and makers. | [Build], [Crew], [Art] |
+
+**Ranks**
+- **Number cards, 1–10:** the rank is the card's power. The 1 is the Ace.
+- **Court cards:** one King, Queen, Knight and Page per element. The court rank must match the card's class. A court card's power can be anything.
+- **Jokers:** Joker-class cards are rank **0**, the Fool. They are never number or court cards. A playing-card deck uses two of them.
+- In a 52-card deck, the Page plays as the Jack and Knights are left out. Tarot uses all four court cards.
+
+**The corner index**
+Each card shows its element symbol and rank in two opposite corners, like a playing card, so the rank still shows when the cards are fanned. The index is separate from the power box. On a number card it repeats the power; on a court card it shows K, Q, Kn or P; on a Joker it shows 0.
+
+**Assigning, in order**
+1. **Element from tags.** Use the card's first tag. A card whose two tags point to different elements can take either one, whichever fills a gap.
+2. **Courts.** In each element, pick the King, Queen, Knight and Page who best fit it, such as a fire circle lead for King of Fire.
+3. **Numbers.** Fill 1–10 in each element. To fill a gap, power can move by **up to 2**. When it does, resize the ability to keep the card balanced: a higher power gets a smaller ability.
+4. **Spread the classes.** Each element's ten number cards should mix Kings, Queens, Knights and Pages, not mostly one class.
+5. **Gaps.** One full deck needs 58 cards: 40 numbers, 16 courts and 2 Jokers. If a slot can't be filled, leave it empty or fill it with a camp or event card.
+6. **Duplicates are fine.** With more people than slots, several cards share a rank. Any one of them completes the deck.
+
+**Power 10.** Number cards need a power 10 in each element. Give power 9 and 10 cards a small or conditional ability.
+
 ## Current examples
 | Card | Class | Ability |
 |---|---|---|

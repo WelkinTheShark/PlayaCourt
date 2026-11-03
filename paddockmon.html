@@ -59,6 +59,17 @@ figcaption{margin-top:10px;color:var(--muted);font-size:16px}
 .turn li{padding:12px 16px;border-radius:12px;border:1px solid var(--line);background:rgba(244,236,221,.04)}
 .turn b{display:block;font:700 20px/1.2 var(--disp);letter-spacing:.05em;color:var(--gold)}
 /* Click-to-enlarge without scripts: the overlay shows when its id is the URL fragment. */
+/* Click a card to zoom it. Pure CSS (:target), since the CSP allows no scripts. */
+.zo{cursor:zoom-in}
+.zc{position:relative}.zc>.zo{position:absolute;inset:0;z-index:6}
+.zx{display:none}
+.zw:target .zx{display:block;position:fixed;inset:0;z-index:50;background:rgba(10,8,6,.9);cursor:zoom-out}
+.zw:target .zx::after{content:"Close \2715";position:absolute;top:14px;right:18px;font:700 18px/1 var(--disp);letter-spacing:.1em;text-transform:uppercase;color:var(--cream);background:rgba(0,0,0,.5);border:1px solid var(--line);border-radius:999px;padding:10px 16px}
+.zw:target img.zi,.zw:target .cardwrap{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:51;pointer-events:none;box-shadow:0 20px 60px rgba(0,0,0,.7)}
+.zw:target img.zi{width:auto;height:auto;max-width:92vw;max-height:88vh;aspect-ratio:auto}
+.zw:target .cardwrap{--s:.8}
+@media (max-height:900px){.zw:target .cardwrap{--s:.6}}
+@media (max-height:620px),(max-width:640px){.zw:target .cardwrap{--s:.42}}
 .lb{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(10,8,6,.92)}
 .lb:target{display:flex}
 .lb img{max-width:min(94vw,900px);max-height:88vh;width:auto;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.7)}
@@ -108,15 +119,15 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
 <div class="person">
 <h3>ISHYne</h3>
 <div class="cards">
-<figure><img src="art/paddockmon/ishyne.jpg" alt="Ishyne's Paddockmon card: a rat with a heart-shaped umbrella, signed." width="666" height="900" loading="lazy" decoding="async"><figcaption>Paddockmon · 2026</figcaption></figure>
-<figure><img src="art/Ishyne%20Joker.png" alt="ISHYne's Playa Court card, a Joker." width="600" height="840" loading="lazy" decoding="async"><figcaption>Playa Court · 2027</figcaption></figure>
+<figure><span class="zw" id="z-pm-old-ishyne"><a class="zo" href="#z-pm-old-ishyne"><img class="zi" src="art/paddockmon/ishyne.jpg" alt="Ishyne's Paddockmon card: a rat with a heart-shaped umbrella, signed." width="666" height="900" loading="lazy" decoding="async"></a><a class="zx" href="#_" aria-label="Close"></a></span><figcaption>Paddockmon · 2026</figcaption></figure>
+<figure><span class="zw" id="z-pm-ishyne"><a class="zo" href="#z-pm-ishyne"><img class="zi" src="art/PC1-004-ISHYne.png" alt="ISHYne's Playa Court card, a Joker." width="600" height="840" loading="lazy" decoding="async"></a><a class="zx" href="#_" aria-label="Close"></a></span><figcaption>Playa Court · 2027</figcaption></figure>
 </div>
 </div>
 <div class="person">
 <h3>Jonny 5</h3>
 <div class="cards">
-<figure><img src="art/paddockmon/jonny5.jpg" alt="Jonny 5's Paddockmon card: a guitar-playing rabbit." width="664" height="900" loading="lazy" decoding="async"><figcaption>Paddockmon · 2026</figcaption></figure>
-<figure><img src="art/Jonny%205%20UnCommissary%20Joker.png" alt="Jonny 5's Playa Court card, a Joker from UnCommissary." width="600" height="840" loading="lazy" decoding="async"><figcaption>Playa Court · 2027</figcaption></figure>
+<figure><span class="zw" id="z-pm-old-jonny5"><a class="zo" href="#z-pm-old-jonny5"><img class="zi" src="art/paddockmon/jonny5.jpg" alt="Jonny 5's Paddockmon card: a guitar-playing rabbit." width="664" height="900" loading="lazy" decoding="async"></a><a class="zx" href="#_" aria-label="Close"></a></span><figcaption>Paddockmon · 2026</figcaption></figure>
+<figure><span class="zw" id="z-pm-jonny"><a class="zo" href="#z-pm-jonny"><img class="zi" src="art/PC1-001-Jonny5.png" alt="Jonny 5's Playa Court card, a Joker from UnCommissary." width="600" height="840" loading="lazy" decoding="async"></a><a class="zx" href="#_" aria-label="Close"></a></span><figcaption>Playa Court · 2027</figcaption></figure>
 </div>
 </div>
 </div>
