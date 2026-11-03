@@ -72,7 +72,7 @@ A card gets **one or two** tags, read from the sign-up form.
 - **Literal beats inferred.** "Dancing with a fan" is [Dance]; "Partying" is not [Dance] unless dancing is mentioned.
 - **One tag is fine.** Don't add a second one just to fill the line.
 - **Feelings and skills aren't tags.** Joyful heart, lifelong learning and time dilation go in the ability or flavor, not the type line. The exception is when they clearly point to a tag, like a smile and a joyful heart pointing to [Care].
-- **No drug or alcohol tags.** The game is played at all ages. Substances can inspire flavor or a nearby tag (spirit tastings → [Food]), but never a tag of their own.
+- **Substances are PG-13.** When smoking or drinking is part of who someone is, keep it: it can show in the art, flavor and ability, and lead to a nearby tag (spirit tastings → [Food]). There's no tag of its own for it.
 
 **What each tag covers:**
 | Tag | Comes from |

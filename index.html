@@ -39,11 +39,26 @@ h1{font:700 clamp(56px,9vw,104px)/.92 var(--disp);letter-spacing:.06em;margin:14
 .btns{display:flex;flex-wrap:wrap;gap:12px}
 .btn{display:inline-block;font:700 18px/1 var(--disp);letter-spacing:.1em;text-transform:uppercase;text-decoration:none;padding:15px 22px;border-radius:999px;border:2px solid var(--gold);color:var(--gold)}
 .btn.primary{background:var(--gold);color:#1C1714}.btn:hover{filter:brightness(1.1)}
-.herocards{--u:1px;position:relative;justify-self:center;width:calc(470*var(--u));height:calc(470*var(--u))}
-.hc{position:absolute;width:calc(222*var(--u));height:auto;aspect-ratio:600/840;border-radius:5.1%;box-shadow:0 22px 46px rgba(0,0,0,.55),0 0 0 1px rgba(0,0,0,.4)}
-.hc.back{width:calc(190*var(--u));left:calc(136*var(--u));top:0;transform:rotate(2deg);filter:brightness(.82) saturate(.9);z-index:1;-webkit-mask-image:linear-gradient(to bottom,#000 50%,transparent 66%);mask-image:linear-gradient(to bottom,#000 50%,transparent 100%);box-shadow:none}
-.hc.left{left:calc(6*var(--u));top:calc(146*var(--u));transform:rotate(-8deg);z-index:2}
-.hc.right{left:calc(222*var(--u));top:calc(146*var(--u));transform:rotate(8deg);z-index:3}
+.herocards{--u:1px;position:relative;justify-self:center;width:calc(470*var(--u));height:calc(390*var(--u))}
+/* Six cards in two overlapping rows: the front row covers only the back row's rules text, so names and art show. */
+.herocards .hc{width:calc(162*var(--u))}
+.herocards .r1{left:0;top:calc(8*var(--u));transform:rotate(-6deg)}
+.herocards .r2{left:calc(154*var(--u));top:0;z-index:1}
+.herocards .r3{left:calc(308*var(--u));top:calc(8*var(--u));transform:rotate(6deg);z-index:2}
+.herocards .r4{left:calc(8*var(--u));top:calc(150*var(--u));transform:rotate(-4deg);z-index:3}
+.herocards .r5{left:calc(154*var(--u));top:calc(142*var(--u));z-index:4}
+.herocards .r6{left:calc(300*var(--u));top:calc(150*var(--u));transform:rotate(4deg);z-index:5}
+.ringcards{--u:1px;position:relative;justify-self:center;width:calc(470*var(--u));height:calc(490*var(--u))}
+/* Five cards on a circle (centre 235,260, radius 180) in beats order, clockwise from Joker at the top. */
+.ringcards .ringline{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.hc{position:absolute;width:calc(112*var(--u));height:auto;aspect-ratio:600/840;border-radius:5.1%;box-shadow:0 16px 34px rgba(0,0,0,.55),0 0 0 1px rgba(0,0,0,.4)}
+.ringcards .r1{left:calc(179*var(--u));top:calc(2*var(--u))}
+.ringcards .r2{left:calc(350*var(--u));top:calc(126*var(--u))}
+.ringcards .r3{left:calc(285*var(--u));top:calc(327*var(--u))}
+.ringcards .r4{left:calc(73*var(--u));top:calc(327*var(--u))}
+.ringcards .r5{left:calc(8*var(--u));top:calc(126*var(--u))}
+.beat{position:absolute;z-index:5;width:calc(32*var(--u));height:calc(32*var(--u));margin:calc(-16*var(--u)) 0 0 calc(-16*var(--u));border-radius:50%;background:var(--gold);color:#1C1714;box-shadow:0 0 0 calc(3*var(--u)) var(--bg),0 4px 12px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center}
+.beat svg{width:60%;height:60%}
 .fan{position:relative;justify-self:center;width:460px;height:400px}.fan .cardwrap{position:absolute;top:20px;box-shadow:0 24px 50px rgba(0,0,0,.55)}
 .fan .cardwrap:nth-child(1){left:0;transform:rotate(-9deg)}.fan .cardwrap:nth-child(2){left:102px;top:0;z-index:2}.fan .cardwrap:nth-child(3){left:204px;transform:rotate(9deg);z-index:3}
 .backsvg{display:block;width:100%;height:auto}
@@ -59,10 +74,28 @@ p{margin:0 0 14px;max-width:44em}
 ol.steps{list-style:none;counter-reset:s;padding:0;margin:0;display:grid;gap:12px;max-width:46em}
 ol.steps li{counter-increment:s;position:relative;padding:14px 18px 14px 66px;border-radius:14px;background:rgba(244,236,221,.04);border:1px solid var(--line)}
 ol.steps li::before{content:counter(s);position:absolute;left:16px;top:12px;width:36px;height:36px;border-radius:50%;background:var(--gold);color:#1C1714;font:700 22px/36px var(--disp);text-align:center}
-ol.steps b{font-family:var(--disp);font-size:21px;letter-spacing:.04em}
+ol.steps b{display:block;font-family:var(--disp);font-size:22px;letter-spacing:.04em;color:var(--gold);margin-bottom:2px}
+ol.steps em{font-style:normal;font-weight:600}
+.flow{display:flex;flex-wrap:wrap;gap:8px 6px;margin:0 0 16px;max-width:46em}
+.flow span{font:700 16px/1 var(--disp);letter-spacing:.08em;text-transform:uppercase;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:rgba(244,236,221,.05)}
+.flow span:not(:last-child)::after{content:"\2192";margin-left:10px;color:var(--gold)}
+.flow span:last-child{border-color:var(--teal);color:var(--teal)}
+.board{margin:20px 0 28px;max-width:46em}
+.board .tbl{border:1px solid var(--line);border-radius:18px;padding:16px;background:rgba(63,217,200,.04);display:grid;gap:14px}
+.board .side{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 24px}
+.board .who{flex-basis:100%;display:flex;align-items:center;gap:10px;font:700 20px/1 var(--disp);letter-spacing:.06em;color:var(--gold)}
+.board .zone{display:flex;flex-direction:column;gap:6px}
+.board .zl{font:600 13px/1 var(--disp);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.board .row{display:flex;gap:8px;align-items:center;min-height:14px}
+.board .mid{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px 32px;padding:12px 0;border-top:1px dashed var(--line);border-bottom:1px dashed var(--line)}
+.board .mid .zone{align-items:center}
+.mc{box-sizing:border-box;width:68px;height:94px;border-radius:9px;background:var(--panel);color:var(--ink);border-top:12px solid var(--band);padding:4px 6px;display:flex;flex-direction:column;font:600 12px/1.1 var(--disp)}
+.mc b{font:700 24px/1 var(--disp)}.mc span{flex:1;margin-top:3px}.mc i{font-style:normal;font-size:11px;letter-spacing:.06em;text-transform:uppercase;opacity:.75}
+.mc.back{background:#2A231E radial-gradient(circle,var(--teal) 0 5px,transparent 6px);border:2px solid var(--gold)}
+.tok{display:inline-block;width:14px;height:14px;border-radius:50%;background:var(--gold);box-shadow:inset 0 -2px rgba(0,0,0,.3)}
+.board figcaption{margin-top:10px;color:var(--muted);font-size:.92em}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
 .ring{width:100%;max-width:560px;height:auto;display:block;margin:0 auto}
-.ring .rn{font:700 22px var(--disp);letter-spacing:.06em;fill:#fff}.ring .rl{font:600 14px var(--disp);letter-spacing:.1em;fill:var(--gold);text-transform:uppercase}
 .callout{border-left:4px solid var(--teal);background:rgba(63,217,200,.07);padding:14px 18px;border-radius:0 12px 12px 0;margin:18px 0;max-width:44em}
 table{border-collapse:collapse;width:100%;font-size:17px;margin:8px 0 6px}
 th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
@@ -110,7 +143,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
 .card .gem.ul{text-decoration:underline;text-decoration-thickness:5px;text-underline-offset:6px}
 .card .note{width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:var(--teal);color:#0E1E1C;font:700 30px/46px var(--disp);text-align:center;box-shadow:0 0 0 4px #0E1E1C}
 .burnt{transform:rotate(180deg)}
-@media (max-width:860px){.hero .wrap,.split{grid-template-columns:1fr}.herocards{order:-1;--u:.7px}.fan{order:-1;width:310px;height:290px}.fan .cardwrap{--s:.24}.fan .cardwrap:nth-child(2){left:64px}.fan .cardwrap:nth-child(3){left:128px}.need{grid-template-columns:1fr}.legend{columns:1}}
+@media (max-width:860px){.hero .wrap,.split{grid-template-columns:1fr}.herocards{order:-1;--u:.7px}.ringcards{--u:.7px}.fan{order:-1;width:310px;height:290px}.fan .cardwrap{--s:.24}.fan .cardwrap:nth-child(2){left:64px}.fan .cardwrap:nth-child(3){left:128px}.need{grid-template-columns:1fr}.legend{columns:1}}
 @media (max-width:520px){body{font-size:17px}.wrap{padding:0 16px}section{padding:52px 0}.cardwrap.big{--s:.42}.gallery{gap:20px 12px}.gallery .cardwrap{--s:.2}.gitem{width:150px}nav.top a.l{font-size:15px}dl.kw{grid-template-columns:1fr;gap:2px 0}dl.kw dd{margin-bottom:12px}}
 @media (max-width:600px){.stack thead{position:absolute;left:-9999px}.stack tr{display:block;border:1px solid var(--line);border-radius:12px;padding:6px 14px;margin:0 0 12px;background:rgba(244,236,221,.03)}
 .stack td{display:grid;grid-template-columns:96px 1fr;gap:10px;border:0;padding:6px 0}.stack td::before{content:attr(data-label);font:700 14px/1.6 var(--disp);letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}}
@@ -130,7 +163,14 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
 <p class="lead">A gifted card game where every card is someone at unSCruz. Pick a card. Flip together. Make a friend.</p>
 <div class="btns"><a class="btn primary" href="https://docs.google.com/forms/d/1iFV0dNY1aKpsGeerfGngpiqYUs7fclOhsiuBPd6YN6s/viewform" rel="noopener">Become a card</a><a class="btn" href="#play">How to play</a></div>
 </div>
-<div class="herocards"><img class="hc back" src="art/Stu%20King.png" alt="Stu: King, power 7, [Build]. Aura: Your [Build] get +2." width="600" height="840" decoding="async"><img class="hc left" src="art/Jonny%205%20UnCommissary%20Joker.png" alt="Jonny 5: Joker · UnCommissary, power 5, [Food]. Self: +1 for each [Food] in any camp." width="600" height="840" decoding="async"><img class="hc right" src="art/Mama%20Rik%20Uncommissary%20Queen.png" alt="Mama Rik: Queen · UnCommissary, power 8, [Food] [Dance]. Aura: All [Food] get +2." width="600" height="840" decoding="async"></div>
+<div class="herocards">
+<img class="hc r1" src="art/Stu%20King.png" alt="Stu: King, power 7, [Build]. Aura: Your [Build] get +2." width="600" height="840" decoding="async">
+<img class="hc r2" src="art/Zaddy%20cornr%20store%20knight.png" alt="Zaddy: Knight · The Corn'r Store, power 5, [Food] [Art]. Self: +2 for each enemy [Food]." width="600" height="840" decoding="async">
+<img class="hc r3" src="art/Wob%20Page.png" alt="Wob: Page · The Fire Circle, power 3, [Fire]. Self: Copy any ability in any camp." width="600" height="840" decoding="async">
+<img class="hc r4" src="art/Jonny%205%20UnCommissary%20Joker.png" alt="Jonny 5: Joker · UnCommissary, power 5, [Food]. Self: +1 for each [Food] in any camp." width="600" height="840" decoding="async">
+<img class="hc r5" src="art/Mama%20Rik%20Uncommissary%20Queen.png" alt="Mama Rik: Queen · UnCommissary, power 8, [Food] [Dance]. Aura: All [Food] get +2." width="600" height="840" decoding="async">
+<img class="hc r6" src="art/Ishyne%20Joker.png" alt="ISHYne: Joker, no camp, power 4, [Care] [Crew]. Self: +6 against a Knight." width="600" height="840" decoding="async">
+</div>
 </div></header>
 
 <main id="main">
@@ -170,23 +210,24 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
 <p>The cards you've played stay face up in front of you, in the order played. That row is your <b>camp</b>. The card you're playing this round counts as being in your camp; the cards still in your hand don't.</p>
 
 <h3>Each round</h3>
+<p class="flow" aria-hidden="true"><span>Choose</span><span>Reveal</span><span>Apply</span><span>Compare</span><span>Score</span><span>Camp</span><span>Repeat</span></p>
 <ol class="steps">
-<li><b>Choose.</b> Both players pick a card from their hand and place it face down.</li>
-<li><b>Reveal.</b> Flip together.</li>
-<li><b>Burn Outs first.</b> Any card that's Burnt Out is flipped upside down, and its ability stops.</li>
-<li><b>Jokers bend the rules.</b> Apply any rule-changing abilities.</li>
-<li><b>Add up power.</b> Start from the printed number, then add every bonus from abilities in both camps.</li>
-<li><b>Compare.</b> If one card <b>beats</b> the other's class, it wins. Otherwise the higher power wins. Equal power is a tie.</li>
-<li><b>Score.</b> The winner takes one token from the pile, plus every token in the Temple. On a tie, one token moves from the pile to the <b>Temple</b> and nobody scores.</li>
-<li><b>Camp.</b> Both cards stay face up in their owner's camp, and any "If this wins" or "If this loses" abilities happen now.</li>
+<li><b>Choose</b>Both players pick a card from their hand and place it face down.</li>
+<li><b>Reveal</b>Flip together.</li>
+<li><b>Apply card effects</b>Burn Outs happen first: flip that card upside down, and its ability stops. Then add every bonus from abilities in all camps to each card's printed power.</li>
+<li><b>Compare</b>If one card <em>beats</em> the other's class, it wins. Otherwise the higher power wins. Equal power is a tie.</li>
+<li><b>Score</b>The winner takes one token from the pile, plus every token in the Temple. On a tie, one token moves from the pile to the <em>Temple</em> and nobody scores.</li>
+<li><b>Camp</b>Both cards stay face up in their owner's camp. Any "If this wins" or "If this loses" abilities happen now.</li>
+<li><b>Repeat</b>Play the next round, until the last round is done or someone reaches Exodus.</li>
 </ol>
 
 <h3>Winning</h3>
 <ul>
-<li>The moment you hold 3 points, it's <b>Exodus</b>: the match ends and you win.</li>
-<li>If all 5 rounds are played and nobody has 3, any tokens left in the Temple are discarded and the player with more points wins.</li>
+<li>The player with <b>more tokens</b> wins.</li>
+<li>The moment you hold 3 tokens, it's <b>Exodus</b>: the match ends and you win.</li>
+<li>After the last round, any tokens left in the Temple are discarded.</li>
 <li>If the <b>last round</b> ties, the card with the higher printed power wins it and takes the Temple. If printed power is equal too, the round is a draw.</li>
-<li>If the points end even, the match is a <b>Whiteout</b>: nobody wins.</li>
+<li>If tokens end even, the match is a <b>Whiteout</b>: nobody wins.</li>
 </ul>
 
 <h3>Building your hand</h3>
@@ -204,7 +245,19 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
 <p>Because the ring has no top, a power-2 Joker can still knock out a power-9 King. No card is safe, and every reveal is a guess.</p>
 <div class="callout">The class is printed under the card's name and again on the dark bar under the art. The <b>Beats</b> strip at the top of the rules box tells you which class it beats.</div>
 </div>
-<div><svg class="ring" viewBox="0 0 600 440" role="img" aria-label="The class ring: Joker beats King, King beats Knight, Knight beats Queen, Queen beats Page, Page beats Joker."><defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#D9A441"></path></marker></defs><line x1="350" y1="80" x2="392" y2="144" stroke="#D9A441" stroke-width="2" marker-end="url(#arr)"></line><text x="395" y="84" text-anchor="middle" class="rl">beats</text><line x1="423" y1="196" x2="407" y2="299" stroke="#D9A441" stroke-width="2" marker-end="url(#arr)"></line><text x="453" y="265" text-anchor="middle" class="rl">beats</text><line x1="326" y1="331" x2="274" y2="331" stroke="#D9A441" stroke-width="2" marker-end="url(#arr)"></line><text x="300" y="376" text-anchor="middle" class="rl">beats</text><line x1="193" y1="299" x2="177" y2="196" stroke="#D9A441" stroke-width="2" marker-end="url(#arr)"></line><text x="147" y="265" text-anchor="middle" class="rl">beats</text><line x1="208" y1="144" x2="250" y2="80" stroke="#D9A441" stroke-width="2" marker-end="url(#arr)"></line><text x="205" y="84" text-anchor="middle" class="rl">beats</text><rect x="244" y="36" width="112" height="48" rx="24" fill="#A8322B"></rect><text x="300" y="68" text-anchor="middle" class="rn">Joker</text><rect x="387" y="140" width="112" height="48" rx="24" fill="#C9962B"></rect><text x="443" y="172" text-anchor="middle" class="rn">King</text><rect x="332" y="307" width="112" height="48" rx="24" fill="#24609F"></rect><text x="388" y="339" text-anchor="middle" class="rn">Knight</text><rect x="156" y="307" width="112" height="48" rx="24" fill="#6D3A87"></rect><text x="212" y="339" text-anchor="middle" class="rn">Queen</text><rect x="101" y="140" width="112" height="48" rx="24" fill="#2E8B67"></rect><text x="157" y="172" text-anchor="middle" class="rn">Page</text><circle cx="300" cy="210" r="34" fill="none" stroke="#3FD9C8" stroke-width="1.5" opacity=".6"></circle><circle cx="300" cy="210" r="10" fill="#3FD9C8" opacity=".8"></circle></svg></div>
+<div><div class="ringcards" role="group" aria-label="The class ring, shown with one real card of each class: Joker beats King, King beats Knight, Knight beats Queen, Queen beats Page, Page beats Joker.">
+<svg class="ringline" viewBox="0 0 470 490" aria-hidden="true"><circle cx="235" cy="260" r="180" fill="none" stroke="#D9A441" stroke-width="4" opacity=".85"></circle></svg>
+<img class="hc r1" src="art/Jonny%205%20UnCommissary%20Joker.png" alt="Jonny 5: Joker · UnCommissary, power 5, [Food]. Self: +1 for each [Food] in any camp." width="600" height="840" decoding="async">
+<img class="hc r2" src="art/Stu%20King.png" alt="Stu: King, power 7, [Build]. Aura: Your [Build] get +2." width="600" height="840" decoding="async">
+<img class="hc r3" src="art/Zaddy%20cornr%20store%20knight.png" alt="Zaddy: Knight · The Corn'r Store, power 5, [Food] [Art]. Self: +2 for each enemy [Food]." width="600" height="840" decoding="async">
+<img class="hc r4" src="art/Mama%20Rik%20Uncommissary%20Queen.png" alt="Mama Rik: Queen · UnCommissary, power 8, [Food] [Dance]. Aura: All [Food] get +2." width="600" height="840" decoding="async">
+<img class="hc r5" src="art/Wob%20Page.png" alt="Wob: Page · The Fire Circle, power 3, [Fire]. Self: Copy any ability in any camp." width="600" height="840" decoding="async">
+<span class="beat" style="left:calc(341*var(--u));top:calc(114*var(--u))" aria-hidden="true"><svg viewBox="0 0 24 24" style="transform:rotate(36deg)"><path d="M4 12h13M12 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+<span class="beat" style="left:calc(406*var(--u));top:calc(316*var(--u))" aria-hidden="true"><svg viewBox="0 0 24 24" style="transform:rotate(108deg)"><path d="M4 12h13M12 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+<span class="beat" style="left:calc(235*var(--u));top:calc(440*var(--u))" aria-hidden="true"><svg viewBox="0 0 24 24" style="transform:rotate(180deg)"><path d="M4 12h13M12 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+<span class="beat" style="left:calc(64*var(--u));top:calc(316*var(--u))" aria-hidden="true"><svg viewBox="0 0 24 24" style="transform:rotate(252deg)"><path d="M4 12h13M12 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+<span class="beat" style="left:calc(129*var(--u));top:calc(114*var(--u))" aria-hidden="true"><svg viewBox="0 0 24 24" style="transform:rotate(324deg)"><path d="M4 12h13M12 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+</div></div>
 </div></section>
 
 <section class="alt" id="cards"><div class="wrap">
@@ -255,6 +308,26 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
 <section id="example"><div class="wrap">
 <h2>An example match</h2>
 <p class="intro">Sam and Alex play best of 5. Each brings 6 cards; one stays in hand.</p>
+<figure class="board" role="img" aria-label="The table at the start of round 4. Alex has 1 token, 2 cards in hand, and Camp Lead, Dance Captain and Scaffold Crew in camp. Sam has 2 tokens, 2 cards in hand, and Fire Eater, Subwoofer and Late Night Rave in camp. Each has a face-down card in the middle, the pile has 2 tokens and the Temple is empty.">
+<div class="tbl" aria-hidden="true">
+<div class="side">
+<div class="who">Alex <span class="tok"></span></div>
+<div class="zone"><span class="zl">Hand</span><div class="row"><div class="mc back"></div><div class="mc back"></div></div></div>
+<div class="zone"><span class="zl">Camp</span><div class="row"><div class="mc" style="--band:#C9962B"><b>5</b><span>Camp Lead</span><i>King</i></div><div class="mc" style="--band:#6D3A87"><b>5</b><span>Dance Captain</span><i>Queen</i></div><div class="mc" style="--band:#24609F"><b>4</b><span>Scaffold Crew</span><i>Knight</i></div></div></div>
+</div>
+<div class="mid">
+<div class="zone"><span class="zl">Pile</span><div class="row"><span class="tok"></span><span class="tok"></span></div></div>
+<div class="zone"><span class="zl">This round</span><div class="row"><div class="mc back"></div><div class="mc back"></div></div></div>
+<div class="zone"><span class="zl">Temple</span><div class="row"><span class="zl">empty</span></div></div>
+</div>
+<div class="side">
+<div class="zone"><span class="zl">Camp</span><div class="row"><div class="mc" style="--band:#2E8B67"><b>4</b><span>Fire Eater</span><i>Page</i></div><div class="mc" style="--band:#24609F"><b>7</b><span>Subwoofer</span><i>Knight</i></div><div class="mc" style="--band:#A8322B"><b>5</b><span>Late Night Rave</span><i>Joker</i></div></div></div>
+<div class="zone"><span class="zl">Hand</span><div class="row"><div class="mc back"></div><div class="mc back"></div></div></div>
+<div class="who">Sam <span class="tok"></span><span class="tok"></span></div>
+</div>
+</div>
+<figcaption>The table at the start of round 4: three cards in each camp, a face-down card each in the middle, and Sam ahead 2–1.</figcaption>
+</figure>
 <div class="tablewrap"><table class="stack">
 <thead><tr><th>Round</th><th>Sam plays</th><th>Alex plays</th><th>What happens</th><th>Score</th></tr></thead>
 <tbody>
