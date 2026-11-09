@@ -1,1 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2.5 12.5C2.5 7 6.8 3 12 3s9.5 4 9.5 9.5z" fill="#3FD9C8" stroke="#0E3B37" stroke-width="1.2"/><path d="M9.3 12.5h5.4l.8 7.2a1.6 1.6 0 0 1-1.6 1.8h-3.8a1.6 1.6 0 0 1-1.6-1.8z" fill="#D8FBF5" stroke="#0E3B37" stroke-width="1.2"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<defs><radialGradient id="g" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#E9B871" stop-opacity=".75"/><stop offset=".35" stop-color="#8A5A2B" stop-opacity=".35"/><stop offset="1" stop-color="#2A1F17" stop-opacity="0"/></radialGradient></defs>
+<circle cx="32" cy="32" r="30.5" fill="#2A1F17" stroke="#D9A441" stroke-width="2"/>
+<circle cx="32" cy="32" r="25.5" fill="url(#g)" stroke="#D9A441" stroke-width="1.2" opacity=".95"/>
+<path d="M32 12.5 L43.46 47.78 L13.45 25.97 L50.55 25.97 L20.54 47.78Z" fill="none" stroke="#D9A441" stroke-width="1.5" stroke-linejoin="round"/>
+<circle cx="32" cy="12.5" r="5.6" fill="#8E55C7" stroke="#1C1714" stroke-width="1.6"/>
+<path d="M50.55 31.57 L56.59 21.57 L44.5 21.57Z" fill="#E0A62E" stroke="#1C1714" stroke-width="1.6" stroke-linejoin="round"/><path d="M42.95 25.37H58.15" stroke="#1C1714" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M43.46 42.18 L49.51 52.18 L37.41 52.18Z" fill="#D9522F" stroke="#1C1714" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M20.54 53.38 L26.59 43.38 L14.49 43.38Z" fill="#2F7FCB" stroke="#1C1714" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M13.45 20.37 L19.5 30.37 L7.41 30.37Z" fill="#38A36B" stroke="#1C1714" stroke-width="1.6" stroke-linejoin="round"/><path d="M5.85 26.57H21.05" stroke="#1C1714" stroke-width="1.6" stroke-linecap="round"/>
+</svg>
