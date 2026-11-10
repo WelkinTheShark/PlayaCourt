@@ -1,0 +1,9 @@
+# Copy to private/config.toml (gitignored).
+[google]
+spreadsheet_id = ""   # the ID in the "Playa Court Cards" sheet URL
+ethos_doc_id = ""     # the ID in the "Ability ethos" Google Doc URL
+
+# Optional, paid. Leave out to keep using the Midjourney queue.
+# [gemini]
+# api_key = ""                      # or set GEMINI_API_KEY
+# model = "gemini-2.5-flash-image"

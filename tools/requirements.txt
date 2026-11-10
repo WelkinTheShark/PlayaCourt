@@ -1,0 +1,9 @@
+# Rendering (headless Chrome)
+playwright>=1.45
+# Google Sheet + Drive
+google-api-python-client>=2.100
+google-auth-oauthlib>=1.2
+# AI rule drafting (generate)
+anthropic
+# Optional: Gemini image generation (paid)
+google-genai>=1.0

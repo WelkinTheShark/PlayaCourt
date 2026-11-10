@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=block" rel="stylesheet">
+<style>
+/* Card layout, 750 x 1050 = 2.5 x 3.5 in at 300 dpi, screenshotted at 2x (600 dpi).
+   Positions match the .card rules in index.html, which match the PC1 cards. */
+:root{--disp:'Barlow Condensed','Arial Narrow',sans-serif;--serif:'Source Serif 4',Georgia,serif;--cream:#F4ECDD;--dark:#1E1A16}
+html,body{margin:0;background:transparent}
+.card{position:relative;width:750px;height:1050px;background:#231F1B;border-radius:38px;overflow:hidden;color:var(--dark);font-family:var(--serif)}
+/* Print: the cut line is the card edge; colour runs past it by the bleed on every side. */
+.sheet{position:relative;display:inline-block;vertical-align:top;background:#231F1B;padding:var(--bleed)}
+.sheet .strip{position:absolute;left:0;top:0;right:0;height:calc(var(--bleed) + 124px);background:var(--band)}
+.sheet .card{border-radius:0;background:transparent}
+.card>*{position:absolute}
+.band{left:0;top:0;width:750px;height:124px;background:var(--band)}
+.plate{left:155px;top:27px;width:445px;height:88px;background:var(--cream);border-radius:10px}
+.name{left:175px;top:30px;width:415px;height:56px;font:600 56px/56px var(--disp);white-space:nowrap;overflow:hidden}
+.sub{left:175px;top:84px;width:415px;font:600 29px/28px var(--disp);letter-spacing:.12em;text-transform:uppercase;color:var(--ink);white-space:nowrap;overflow:hidden}
+.badge{left:612px;top:34px;width:66px;height:66px;border-radius:14px;background:#231F1B;border:3px solid var(--cream);display:flex;align-items:center;justify-content:center;font:700 28px var(--disp);letter-spacing:.04em;color:var(--cream)}
+.gemsym{left:12px;top:8px;width:136px;height:112px;overflow:visible}
+.gem{left:12px;width:136px;text-align:center;font:700 92px/1 var(--disp);color:var(--cream);-webkit-text-stroke:9px var(--dark);paint-order:stroke fill}
+.artwin{left:18px;top:124px;width:714px;height:440px;overflow:hidden;background:linear-gradient(var(--band),#1C1714)}
+.artwin img{width:100%;height:100%;object-fit:cover;display:block}
+.artwin .pending{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 40px var(--disp);letter-spacing:.2em;color:rgba(244,236,221,.55)}
+.typebar{left:18px;top:564px;width:714px;height:42px;background:#171411}
+.typeline{left:44px;top:564px;width:620px;font:600 29px/42px var(--disp);letter-spacing:.12em;text-transform:uppercase;color:var(--cream);white-space:nowrap;overflow:hidden}
+.set{left:678px;top:568px;width:34px;height:34px;filter:drop-shadow(0 0 3px rgba(63,217,200,.85))}
+.rules{left:18px;top:606px;width:714px;height:362px;background:var(--cream);border-radius:0 0 12px 12px}
+.beats{left:32px;top:618px;width:686px;height:56px;padding:0 16px;box-sizing:border-box;border-radius:10px;background:#E6DAC6;display:flex;align-items:center;gap:14px;font:700 30px var(--disp)}
+.beats .lbl{letter-spacing:.08em;text-transform:uppercase}.beats .cls{font-size:34px;letter-spacing:.06em;text-transform:uppercase;color:var(--bink)}
+.beats svg{width:34px;height:34px}
+.label{left:48px;top:688px;width:654px;font:700 31px/30px var(--disp);letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+.ability{left:48px;top:722px;width:654px;max-height:176px;overflow:hidden;font-size:37.5px;line-height:44px}.ability.up{top:688px;max-height:210px}
+.flavor{left:48px;top:912px;width:654px;font:italic 31px/36px var(--serif);color:#4A423A;white-space:nowrap;overflow:hidden}
+.rarity{left:36px;top:978px;width:30px;height:30px}.rarity svg{width:30px;height:30px;display:block}
+.footer{left:76px;top:980px;width:200px;white-space:nowrap;overflow:hidden;font:500 25px/26px var(--disp);letter-spacing:.06em;color:#CBBFAD}
+.event{left:284px;top:980px;width:430px;white-space:nowrap;overflow:hidden;text-align:right;font:600 21px/26px var(--disp);letter-spacing:.07em;text-transform:uppercase;color:#CBBFAD}
+</style></head>
+<body>{{CARD}}</body></html>

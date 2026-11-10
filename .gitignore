@@ -3,3 +3,4 @@ private/
 # Leftover from a browser "Save page as"
 index_files/
 /workingfiles
+__pycache__/
