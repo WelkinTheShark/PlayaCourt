@@ -27,7 +27,7 @@ COURT_RANK = {"King": "K", "Queen": "Q", "Knight": "Kn", "Page": "P"}
 DRAWN_FIELDS = ["card_id", "status", "name", "class", "camp", "badge", "power", "tag1", "tag2",
                 "scope", "timing", "ability", "flavor", "rarity", "element", "rank",
                 "art_file_id", "art_focus"]
-TEMPLATE_VERSION = "3"  # bump when render/card.html changes so every card re-renders
+TEMPLATE_VERSION = "4"  # bump when render/card.html changes so every card re-renders
 
 
 def tags(card):

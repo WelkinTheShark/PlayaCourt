@@ -1,9 +1,10 @@
 """Render finished card PNGs from card data + art, with headless Chrome (Playwright).
 
-Two versions per card, both at 600 dpi (the 750 x 1050 layout at 2x):
-- print:   the card plus bleed on every side (default 0.125 in → 1650 x 2250), square
-           corners, band and background colours running past the cut line.
-- display: the trimmed card (1500 x 2100) with rounded corners on transparency.
+Three versions per card, all at 600 dpi (the 750 x 1050 layout at 2x):
+- bleed:   print file. The card plus bleed on every side (default 0.125 in -> 1650 x 2250),
+           square corners, band and background colours running past the cut line.
+- trim:    print file without bleed. Exactly 2.5 x 3.5 in (1500 x 2100), square corners, opaque.
+- display: the card (1500 x 2100) with rounded corners on transparency, for screens.
 """
 import base64
 import html
@@ -88,29 +89,33 @@ def card_html(card, settings, art_path=None, mode="display"):
         "</div>",
     ]
     body = "".join(parts)
-    if mode == "print":
+    if mode == "trim":
+        body = f'<div class="trim">{body}</div>'
+    if mode == "bleed":
         bleed = float(settings.get("bleed_in") or 0.125) * 300  # layout is 300 px per inch
         body = (f'<div class="sheet" style="--bleed:{bleed}px;--band:{st["band"]}">'
                 f'<div class="strip"></div>{body}</div>')
     return TEMPLATE.replace("{{CARD}}", body)
 
 
-def render(cards, settings, out_dir, art_paths):
-    """Write <out_dir>/<id>-print.png and <id>-display.png for each card.
-    art_paths: {card_id: local image path or None}. Returns {card_id: (print, display)}."""
+KINDS = {"bleed": ".sheet", "trim": ".card", "display": ".card"}
+
+
+def render(cards, settings, out_dir, art_paths, kinds=tuple(KINDS)):
+    """Write <out_dir>/<id>-<kind>.png for each card and kind.
+    art_paths: {card_id: local image path or None}. Returns {card_id: {kind: path}}."""
     from playwright.sync_api import sync_playwright
     out = {}
     with sync_playwright() as p:
         br = p.chromium.launch(channel="chrome")
         page = br.new_page(viewport={"width": 900, "height": 1200}, device_scale_factor=2)
         for c in cards:
-            paths = []
-            for mode, sel in (("print", ".sheet"), ("display", ".card")):
-                page.set_content(card_html(c, settings, art_paths.get(c["card_id"]), mode), wait_until="networkidle")
+            out[c["card_id"]] = {}
+            for kind in kinds:
+                page.set_content(card_html(c, settings, art_paths.get(c["card_id"]), kind), wait_until="networkidle")
                 page.evaluate("document.fonts.ready")
-                path = out_dir / f"{c['card_id']}-{mode}.png"
-                page.locator(sel).screenshot(path=str(path), omit_background=(mode == "display"))
-                paths.append(path)
-            out[c["card_id"]] = tuple(paths)
+                path = out_dir / f"{c['card_id']}-{kind}.png"
+                page.locator(KINDS[kind]).screenshot(path=str(path), omit_background=(kind == "display"))
+                out[c["card_id"]][kind] = path
         br.close()
     return out

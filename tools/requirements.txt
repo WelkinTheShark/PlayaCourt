@@ -1,9 +1,7 @@
 # Rendering (headless Chrome)
 playwright>=1.45
-# Google Sheet + Drive
+# Google Sheet + Drive (free; OAuth "Desktop app" client)
 google-api-python-client>=2.100
 google-auth-oauthlib>=1.2
-# AI rule drafting (generate)
-anthropic
-# Optional: Gemini image generation (paid)
+# Optional: Gemini image generation (paid). Midjourney needs nothing here.
 google-genai>=1.0

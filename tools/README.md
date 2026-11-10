@@ -1,133 +1,131 @@
-# Playa Court card pipeline
+# Playa Court card studio
 
-All card data lives in **Google Drive → PlayaCourt**, never in this public repo:
+Card data lives in **Google Drive → PlayaCourt**. Cards are designed by **Claude Code** following
+`.claude/skills/playacourt-cards/SKILL.md`; there are no paid AI API calls. These scripts move data
+between the sheet, Drive and Claude Code, and render the finished cards.
 
 ```
 PlayaCourt/
-  Playa Court Cards            ← the sheet: Cards, Guidelines, People (private), Settings, Lists
-  Ability ethos (card design rules)  ← the rulebook `check` follows and `generate` reads
+  Playa Court Cards                  ← the processing sheet (tabs below)
+  Ability ethos (card design rules)  ← the rulebook; every drafting packet includes it
   READ ME - how the card files work
-  Midjourney queue             ← created by `prompts`
+  Midjourney queue                   ← created by `prompts`
   1 - Reference Photos (private)
-  2 - Card Art/
-      Inbox - drop new art here (name starts with card ID)
-      Chosen - final art per card
-  3 - Finished Cards (rendered PNGs)/
-      Print (with bleed)
-      Display (trimmed)
+  2 - Card Art/  Inbox - drop new art here · Chosen - final art per card
+  3 - Finished Cards/  Print (with bleed) · Print (no bleed) · Display (trimmed)
 ```
 
-This folder holds only code. Locally, `private/` (gitignored) holds your Google credentials and
-`config.toml` with the sheet ID. While rendering, the scripts use temp files that are deleted
-afterwards.
+## In Claude Code
 
-## Fast changes
+Open this repo in Claude Code and say **"process new submissions"** (or `/playacourt-cards`).
+The skill walks through:
+1. intake
+2. coordinating camps
+3. drafting each card (you approve every change)
+4. balance
+5. Midjourney prompts
+6. art
+7. render and export
 
-| You want to… | Do this |
+You can also ask for a single step: "redo PC1-007 as more of a combo piece", "make the Fire
+Circle more fire-themed", "new art for Zaddy", "export Wob for print".
+
+## The processing sheet
+
+| Tab | What you put there |
 |---|---|
-| Swap a card's art | Save the image to *2 - Card Art / Inbox* named `PC1-005-anything.png`, then `python tools/pc.py refresh` |
-| Change rules or text | Edit the row in the sheet, then `python tools/pc.py refresh`. Only changed cards re-render. |
-| Draft rules with AI | Add guidelines, then `python tools/pc.py generate PC1-007` |
-| Theme a camp | On the **Guidelines** tab: *Applies to* = Camp, *Which* = the camp name, *Active* = yes. Then `generate` its cards. |
-| Balance test | `python tools/pc.py balance`. To try a change without saving it: `--set PC1-002.power=6` |
-| Freeze a finished card | Set **Locked** = yes |
+| **Cards** | One row per camper. Your custom info for that camper goes in three columns: **What I know about them**, **Card guidelines** (instructions for their rules), and **Art notes** (art direction). |
+| **Camps** | One row per camp, used to coordinate every member's card: **Badge**, **Not a real camp?** (Rogue), **Camp theme**, **Rule themes** (tags or mechanics members lean on), **Art setting** and **Art motifs & colours** (shared in every member's art), **Aliases** (other spellings people used). |
+| **Guidelines** | Rules for many cards at once: All cards / Camp / Class / Tag / Card ID, switched on with *Active = yes*. |
+| **People (private)** | Contact details, photo link and photo consent. Filled in by intake; never put into drafting packets. |
+| **Settings** | Event line, set code, art style, Midjourney parameters, print bleed, Form responses sheet, folder links. |
 
-## How regeneration stays safe
+**What steers a card** (the packet lists these; later lines win):
+1. All-cards guidelines;
+2. class and tag guidelines;
+3. camp guidelines, then the camp's theme and rule themes;
+4. the card's own guidelines;
+5. any one-off `--note`.
 
-- **Locked = yes**: `generate`, `prompts`, `ingest-art` and `render` all skip the card. New art
-  for a locked card stays in the Inbox. Add `--include-locked` to override.
-- **The "why" columns**:
-  - A field marked **Form**, **Known**, **Balance** or **Ethos** is yours. `generate` passes it
-    to the model as fixed and never changes it, even when it's blank (e.g. no camp = Rogue).
-  - Fields that are empty or marked **AI draft** / **Placeholder** are regenerated.
-  - To keep an AI suggestion, change its why to Known or Balance.
-- **Re-rendering only when needed**:
-  - Every card has a hash of everything printed on it.
-  - `render` and `refresh` redraw a card only when that hash changed. A card with no finished
-    file yet is always drawn.
-  - Re-rendering overwrites the existing Drive files, so their links stay the same.
+**Keeping your choices:**
+- **Fields you claim are never redrafted:**
+  - A field whose "why" is **Form**, **Known**, **Balance** or **Ethos** stays fixed, even when blank.
+  - Fields marked **AI draft** or **Placeholder**, or left blank, can be redrafted.
+- **Camp and badge** always follow the Camps tab: change a camp's badge and the next `check` or
+  `refresh` updates every member. The exception is a card whose *Camp: why* you've set.
+- **Locked = yes** on a card or camp freezes it.
 
-## Guidelines for AI rule drafting
+## Commands
 
-`generate` sends Claude:
-- the whole of the **Ability ethos** Google Doc in PlayaCourt, read fresh each run (its ID is
-  `ethos_doc_id` in `private/config.toml`);
-- a one-line summary of every other card, for balance;
-- the sign-up answers;
-- the fixed fields;
-- every guideline that applies to the card:
-  - **Guidelines tab** rows with *Active* = yes, matched by All cards, Camp (printed or as
-    written on the form), Class, Tag or Card ID;
-  - the card's own **Card guidelines** column.
+Run from the repo root: `python tools/pc.py <command>`. `-h` on any command shows its options.
 
-It returns:
-- class, camp/badge, power, tags, scope/timing, ability, flavour, rarity;
-- an **ability value** estimate (used by the balance test);
-- an **art brief**;
-- a short **AI notes** explanation.
+| Step | Command |
+|---|---|
+| Set up / update the sheet | `upgrade-sheet` (adds missing tabs, columns, settings, folders; safe to re-run) |
+| Pull new sign-ups | `intake --dry-run`, then `intake` |
+| Review camps | `camps --new` |
+| Fill in a camp | `set-camp "Name" badge=FC theme="…" rule_themes="…" art_setting="…" art_motifs="…" --reviewed`. Only blank fields are filled; `--force` replaces existing ones. |
+| Drafting packet for Claude Code | `packet PC1-007 [--note "…"]` writes `private/work/packets/PC1-007.md` |
+| Save Claude Code's draft | `apply PC1-007 --preview`, then `apply PC1-007` (reads `private/work/drafts/PC1-007.json`) |
+| Ethos checks | `check` |
+| Balance test | `balance`, plus what-ifs: `--set PC1-007.power=6` |
+| Midjourney prompts | `prompts PC1-007` (sheet + "Midjourney queue" Doc) |
+| Use an image as the art | `set-art PC1-007 path/to/art.png --crop "50% 30%"`, or drop it in the Inbox named `PC1-007-…` |
+| Render changed cards → Drive | `refresh` (= ingest-art + check + render) |
+| Save local copies | `export PC1-007 --kind bleed trim display --to <folder>` |
 
-The model is set in *Settings → Rules model*; the default is `claude-opus-5-5`. Each card is one
-billed API call.
-- **Refusals:** the call uses the API's server-side refusal fallback. If the model declines,
-  the request is retried on a fallback model instead of failing.
-- **Credentials:** uses `ANTHROPIC_API_KEY`, or a profile from `ant auth login`.
+## Card versions
 
-## Print and display renders
-
-| | Size at 600 dpi | Notes |
+| Version | Size at 600 dpi | For |
 |---|---|---|
-| Print | 1650 × 2250 (2.75 × 3.75 in) | Card plus bleed (default 0.125 in, *Settings → Print bleed*) on every side. Band and background run past the cut line; square corners. |
-| Display | 1500 × 2100 (2.5 × 3.5 in) | Trimmed card, rounded corners, transparent outside. |
+| `bleed` | 1650 × 2250 (2.75 × 3.75 in) | Print shops. Colour runs 0.125 in past the cut line (*Settings → Print bleed*). |
+| `trim` | 1500 × 2100 (2.5 × 3.5 in), square corners | Printing without bleed: home printing, or shops that add their own. |
+| `display` | 1500 × 2100, rounded corners, transparent | Screens and the website. |
 
-The layout matches the existing PC1 cards. It uses the same positions as the site's card CSS,
-class element symbols on the power gem and the Beats line, and Self/Aura labels in the class
-colour. The template is `playacourt/card.html`. After you change it, bump `TEMPLATE_VERSION` in
-`rules.py` so every card re-renders.
+Art and sheet values are composed into the card template automatically, with no Photoshop step.
+The **Art crop** column (or `set-art --crop`) frames the image.
 
-## Art
+## Art prompts
 
-- **Midjourney**:
-  - It has no official API, and automating it breaks its terms. `prompts` writes a paste-ready
-    queue to the *Midjourney queue* Doc instead.
-  - You run the prompts and save your pick to the Inbox.
-  - Attach a person's photo as a reference (`--oref`) only if the People tab says yes.
-- **Gemini**: `gen-art --provider gemini` uploads straight to the Inbox. It needs `[gemini]
-  api_key` in `private/config.toml` (paid) and hasn't been run yet.
-- House style comes from *Settings*: Art style, Midjourney parameters and Midjourney style
-  reference. Per card, edit the **Art brief**.
+`prompts` builds each Midjourney prompt from these parts, in order:
+1. the card's **Art brief** (written in the draft);
+2. the camper's **Art notes**;
+3. the camp's **Art setting** and **Art motifs**;
+4. the class colour;
+5. the house **Art style**;
+6. the Midjourney parameters and style reference.
 
-## Balance test
-
-`balance` plays 20,000 random best-of-5 matches:
-- The class ring decides each round first, then power + *Ability value (est.)*.
-- It reports win rates per card and per class, and flags anything above 58% or below 42%.
-
-It doesn't read ability wording, so it's a quick smoke test, not a proof. Fill in the ability
-values (by hand or with `generate`) to make it more meaningful.
+To change the result, edit those cells rather than the prompt. Midjourney has no API and
+automating it breaks its terms, so you run the prompts yourself and save the pick to the Inbox.
+Attach a reference photo only where the queue says consent is yes.
 
 ## Setup (once)
 
 1. `pip install -r tools/requirements.txt`, then `playwright install chromium`, or use the
    installed Chrome.
-2. Google Cloud Console:
+2. Google Cloud Console (free):
    - Enable the **Google Sheets API** and the **Google Drive API**.
-   - Create an **OAuth client ID** (*Desktop app*) and save it as
+   - Create an **OAuth client ID** of type *Desktop app* and save it as
      `private/secrets/client_secret.json`.
    - Add yourself as a test user on the consent screen.
-3. `private/config.toml` already points at the sheet. The first command opens a browser to sign
-   in, and the token is saved in `private/secrets/`.
-4. For `generate`: set `ANTHROPIC_API_KEY`, or run `ant auth login`.
+3. `private/config.toml` holds `spreadsheet_id` and `ethos_doc_id` (already filled in). The first
+   command opens a browser to sign in, and the token is saved in `private/secrets/`.
+4. In the sign-up Form: **Responses → Link to Sheets**. Share that Sheet with the PlayaCourt Drive
+   account, then put its ID in *Settings → Form responses sheet*.
+5. `python tools/pc.py upgrade-sheet`.
 
 ## Files
 
 | Path | Contents |
 |---|---|
-| `pc.py` | Command-line entry point. `python tools/pc.py -h` lists the commands. |
-| `playacourt/schema.py` | Sheet tabs, columns (readable headers ↔ code keys), dropdowns, settings. |
-| `playacourt/store.py` | Reads and writes the sheet; guideline matching; Locked. |
+| `pc.py` | Command-line entry point. |
+| `playacourt/schema.py` | Tabs, columns (readable headers ↔ code keys), form mapping (`FORM_MAP`), settings. |
+| `playacourt/store.py` | Reads and writes the sheet; camp matching (names and aliases); guidelines; Locked. |
+| `playacourt/intake.py` | Form responses → Cards / People / Camps. |
+| `playacourt/generate.py` | Drafting packets for Claude Code; draft validation and apply. |
 | `playacourt/rules.py` | Class ring, colours, symbols, ethos checks, card hashes. |
-| `playacourt/generate.py` | AI rule drafting. |
 | `playacourt/balance.py` | Monte Carlo balance test. |
-| `playacourt/art.py` | Prompts, Midjourney queue, Gemini adapter, Inbox → Chosen. |
-| `playacourt/render.py`, `card.html` | Card template and the print/display renderer. |
+| `playacourt/art.py` | Prompt building, Midjourney queue, `set-art`, Inbox → Chosen, optional Gemini. |
+| `playacourt/render.py`, `card.html` | Card template; bleed / trim / display rendering. Bump `TEMPLATE_VERSION` in `rules.py` after editing the template. |
 | `playacourt/gapi.py` | Google auth, Sheets and Drive helpers. |
+| `../.claude/skills/playacourt-cards/SKILL.md` | The design rules and workflow Claude Code follows. |

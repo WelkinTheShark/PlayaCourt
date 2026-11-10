@@ -11,6 +11,8 @@ html,body{margin:0;background:transparent}
 .sheet{position:relative;display:inline-block;vertical-align:top;background:#231F1B;padding:var(--bleed)}
 .sheet .strip{position:absolute;left:0;top:0;right:0;height:calc(var(--bleed) + 124px);background:var(--band)}
 .sheet .card{border-radius:0;background:transparent}
+/* Print without bleed: the trimmed card, square corners, no transparency. */
+.trim .card{border-radius:0}
 .card>*{position:absolute}
 .band{left:0;top:0;width:750px;height:124px;background:var(--band)}
 .plate{left:155px;top:27px;width:445px;height:88px;background:var(--cream);border-radius:10px}

@@ -54,7 +54,11 @@ def col_letter(i):
 
 # ---------------- Sheets ----------------
 
-def read_tab(sheet_id, tab):
+def read_tab(sheet_id, tab, missing_ok=False):
+    """(rows as {header: value}, header list). With missing_ok, a tab that doesn't exist yet
+    reads as empty instead of failing (upgrade-sheet will add it)."""
+    if missing_ok and tab not in list_tabs(sheet_id):
+        return [], []
     rows = svc("sheets").spreadsheets().values().get(spreadsheetId=sheet_id, range=f"'{tab}'").execute().get("values", [])
     if not rows:
         return [], []
@@ -78,6 +82,50 @@ def append_rows(sheet_id, tab, rows):
     svc("sheets").spreadsheets().values().append(
         spreadsheetId=sheet_id, range=f"'{tab}'!A1", valueInputOption="RAW",
         insertDataOption="INSERT_ROWS", body={"values": rows}).execute()
+
+
+_tab_cache = {}
+
+
+def _sheet_props(sheet_id):
+    meta = svc("sheets").spreadsheets().get(spreadsheetId=sheet_id,
+                                            fields="sheets(properties(sheetId,title,gridProperties))").execute()
+    return {s["properties"]["title"]: s["properties"] for s in meta["sheets"]}
+
+
+def list_tabs(sheet_id):
+    if sheet_id not in _tab_cache:
+        _tab_cache[sheet_id] = list(_sheet_props(sheet_id))
+    return _tab_cache[sheet_id]
+
+
+def add_tab(sheet_id, title, header):
+    """Create a tab with a bold, frozen header row."""
+    resp = svc("sheets").spreadsheets().batchUpdate(spreadsheetId=sheet_id, body={"requests": [
+        {"addSheet": {"properties": {"title": title, "gridProperties": {"frozenRowCount": 1,
+                                                                          "columnCount": max(26, len(header))}}}}]}).execute()
+    sid = resp["replies"][0]["addSheet"]["properties"]["sheetId"]
+    svc("sheets").spreadsheets().values().update(
+        spreadsheetId=sheet_id, range=f"'{title}'!A1", valueInputOption="RAW", body={"values": [header]}).execute()
+    svc("sheets").spreadsheets().batchUpdate(spreadsheetId=sheet_id, body={"requests": [
+        {"repeatCell": {"range": {"sheetId": sid, "startRowIndex": 0, "endRowIndex": 1},
+                        "cell": {"userEnteredFormat": {"textFormat": {"bold": True}}},
+                        "fields": "userEnteredFormat.textFormat.bold"}}]}).execute()
+    _tab_cache.pop(sheet_id, None)
+
+
+def add_columns(sheet_id, tab, current_header, new_headers):
+    """Append header cells after the last existing column, growing the grid if needed."""
+    props = _sheet_props(sheet_id)[tab]
+    need = len(current_header) + len(new_headers)
+    have = props["gridProperties"]["columnCount"]
+    if need > have:
+        svc("sheets").spreadsheets().batchUpdate(spreadsheetId=sheet_id, body={"requests": [
+            {"appendDimension": {"sheetId": props["sheetId"], "dimension": "COLUMNS", "length": need - have}}]}).execute()
+    start = col_letter(len(current_header))
+    svc("sheets").spreadsheets().values().update(
+        spreadsheetId=sheet_id, range=f"'{tab}'!{start}1", valueInputOption="RAW",
+        body={"values": [list(new_headers)]}).execute()
 
 
 # ---------------- Drive ----------------

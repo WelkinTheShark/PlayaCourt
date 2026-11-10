@@ -23,8 +23,10 @@ ID_RE = re.compile(r"^(PC\d+-\d{3})", re.I)
 COLOUR_WORDS = {"King": "gold", "Queen": "blue", "Knight": "ember orange", "Page": "green", "Joker": "violet"}
 
 
-def build_prompt(card, settings):
-    """Art brief + house style. Edit Art brief / Art style in the sheet, never the prompt."""
+def prompt_parts(card, settings, camp=None):
+    """The pieces of a card's art prompt, most specific first:
+    the card's Art brief → the camper's Art notes → the camp's Art setting and motifs →
+    class colour → house Art style → Midjourney parameters. Edit those cells, never the prompt."""
     brief = card.get("art_brief", "").strip()
     if not brief:
         brief = f"portrait of {card.get('name', 'a festival-goer')}"
@@ -32,14 +34,32 @@ def build_prompt(card, settings):
         known = [k for k in known if k]
         if known:
             brief += ", known for " + ", ".join(known)
-        if card.get("camp"):
-            brief += f", at their camp {card['camp']}"
+    parts = [("brief", brief)]
+    if card.get("art_notes", "").strip():
+        parts.append(("camper", card["art_notes"].strip()))
+    if camp and str(camp.get("rogue", "")).strip().lower() not in schema.YES:
+        if camp.get("art_setting", "").strip():
+            parts.append(("camp setting", camp["art_setting"].strip()))
+        elif camp.get("camp"):
+            parts.append(("camp setting", f"at their camp {camp['camp']}"))
+        if camp.get("art_motifs", "").strip():
+            parts.append(("camp motifs", camp["art_motifs"].strip()))
+    elif card.get("camp"):
+        parts.append(("camp setting", f"at their camp {card['camp']}"))
     colour = COLOUR_WORDS.get(card.get("class", ""), "")
-    sky = f", {colour} accents in the sky" if colour else ""
+    if colour:
+        parts.append(("class colour", f"{colour} accents in the sky"))
+    if settings.get("art_style", "").strip():
+        parts.append(("house style", settings["art_style"].strip()))
+    return parts
+
+
+def build_prompt(card, settings, camp=None):
+    text = ", ".join(p for _, p in prompt_parts(card, settings, camp))
     params = settings.get("mj_params", "").strip()
     if settings.get("mj_sref"):
         params += f" --sref {settings['mj_sref']}"
-    return f"{brief}, {settings.get('art_style', '').strip()}{sky} {params}".strip()
+    return f"{text} {params}".strip()
 
 
 def mj_queue_text(cards, people):
@@ -120,6 +140,30 @@ def ingest(wb, include_locked=False):
         print(f"  {cid}: {f['name']} → Chosen/{name}")
         done.append(card["card_id"])
     return done
+
+
+def _safe_name(card, ext):
+    return f"{card['card_id']}-{re.sub(r'[^A-Za-z0-9]+', '-', card.get('name', '')).strip('-')}{ext}"
+
+
+def set_art(wb, card, source, crop=None):
+    """Make `source` this card's art: a local image file (uploaded to Chosen) or a Drive file
+    ID / link (used where it is). Returns the Drive file ID."""
+    import mimetypes
+    from . import gapi
+    path = Path(source)
+    if path.is_file():
+        ext = path.suffix.lower() or ".png"
+        fid = gapi.upload(path, wb.settings()["drive_final_id"], _safe_name(card, ext),
+                          mime=mimetypes.guess_type(path.name)[0] or "image/png")
+    else:
+        m = re.search(r"(?:id=|/d/)([A-Za-z0-9_-]{20,})", source)
+        fid = m.group(1) if m else source.strip()
+    fields = {"art_file_id": fid, "art_status": "chosen"}
+    if crop:
+        fields["art_focus"] = crop
+    wb.update(card["card_id"], fields)
+    return fid
 
 
 def download_art(card, folder: Path):
