@@ -73,13 +73,15 @@ def _deck_line(c):
     return f"{c['card_id']} {c.get('name')}: {c.get('class')} {c.get('power')} {tags} | {lbl} {c.get('ability')}".strip()
 
 
-def build_request(card, wb):
+def build_request(card, wb, note=None):
     fixed = {f: card.get(f) for f in schema.GENERATED_FIELDS if _owned(card, f)}
     form = {k: card.get(k) for k in ("name", "class_requested", "camp_raw", "known_for_1", "known_for_2",
                                       "known_for_3", "my_input") if card.get(k)}
     deck = [_deck_line(c) for c in wb.cards()
             if c["card_id"] != card["card_id"] and c.get("status") not in ("withdrawn", "submitted") and c.get("ability")]
     guides = wb.guidelines_for(card)
+    if note:
+        guides.append(f"[This run only] {note}")
     user = "\n\n".join([
         f"<ethos>\n{ethos_text()}\n</ethos>",
         "<deck>\n" + ("\n".join(deck) or "(no other cards yet)") + "\n</deck>",
@@ -91,7 +93,7 @@ def build_request(card, wb):
     return user
 
 
-def generate_card(card, wb, client=None):
+def generate_card(card, wb, client=None, note=None):
     import anthropic
     client = client or anthropic.Anthropic()
     resp = client.beta.messages.create(
@@ -102,7 +104,7 @@ def generate_card(card, wb, client=None):
         thinking={"type": "adaptive"},
         output_config={"effort": "high", "format": {"type": "json_schema", "schema": OUTPUT_SCHEMA}},
         system=SYSTEM,
-        messages=[{"role": "user", "content": build_request(card, wb)}],
+        messages=[{"role": "user", "content": build_request(card, wb, note)}],
     )
     if resp.stop_reason == "refusal":
         raise RuntimeError(f"{card['card_id']}: model declined ({getattr(resp.stop_details, 'category', None)})")

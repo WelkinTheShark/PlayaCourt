@@ -3,6 +3,7 @@
 
   check                   validate every card against the ethos, record results in the sheet
   generate IDS | --all    draft rules with Claude (only fields you haven't claimed; skips Locked)
+                          --note TEXT one-off instruction, --dry-run show request, --preview don't save
   balance [--set ...]     Monte Carlo balance test, with what-if overrides
   prompts [IDS]           build Midjourney prompts (sheet + Google Doc queue)
   gen-art IDS             generate art with Gemini (optional, paid)
@@ -65,25 +66,38 @@ def cmd_check(a, wb=None):
 
 
 def cmd_generate(a):
-    from playacourt.generate import generate_card
+    from playacourt.generate import build_request, generate_card
     wb = store.open_workbook()
     if not a.ids and not a.all:
         raise SystemExit("Name the cards to generate (e.g. PC1-007 PC1-008), or --all for every "
                          "unlocked submitted/drafting/review card. Each card is one billed Claude call.")
     cards = pick(wb.cards(), a.ids) if a.ids else [c for c in wb.cards() if c.get("status") in DRAFTABLE]
     cards = unlocked(wb, cards, a)
-    print(f"Generating {len(cards)} card(s) with {wb.settings().get('gen_model')}…")
+    if a.dry_run:
+        for c in cards:
+            print(f"===== {c['card_id']} {c.get('name', '')}: request that would be sent (nothing sent) =====")
+            print(build_request(c, wb, a.note))
+        return
+    verb = "Previewing (not saved)" if a.preview else "Generating"
+    print(f"{verb} {len(cards)} card(s) with {wb.settings().get('gen_model')}...")
     for c in cards:
         try:
-            updates = generate_card(c, wb)
+            updates = generate_card(c, wb, note=a.note)
         except RuntimeError as e:
-            print(f"  ✗ {e}")
+            print(f"  x {e}")
+            continue
+        if a.preview:
+            print(f"  {c['card_id']} {c.get('name', '')} would change:")
+            for k, v in updates.items():
+                if str(c.get(k, "")) != str(v):
+                    print(f"    {schema.CARD_HEADER[k]}: {c.get(k, '') or '(blank)'}  ->  {v}")
             continue
         if c.get("status") == "submitted":
             updates["status"] = "drafting"
         wb.update(c["card_id"], updates)
-        print(f"  ✓ {c['card_id']} {c.get('name', '')}: {c.get('class')} {c.get('power')} · {c.get('ability')}")
-    cmd_check(argparse.Namespace(ids=[c["card_id"] for c in cards]), wb)
+        print(f"  ok {c['card_id']} {c.get('name', '')}: {c.get('class')} {c.get('power')} | {c.get('ability')}")
+    if not a.preview:
+        cmd_check(argparse.Namespace(ids=[c["card_id"] for c in cards]), wb)
 
 
 def cmd_balance(a):
@@ -196,6 +210,9 @@ def main():
     cmd("check", cmd_check, "validate cards against the ethos", lock=False)
     p = cmd("generate", cmd_generate, "draft rules with Claude for the named cards")
     p.add_argument("--all", action="store_true", help="every unlocked submitted/drafting/review card")
+    p.add_argument("--note", metavar="TEXT", help="one-off instruction for this run only (not saved)")
+    p.add_argument("--dry-run", action="store_true", help="print the exact request; don't call Claude")
+    p.add_argument("--preview", action="store_true", help="call Claude and show the draft; don't save it")
     p = cmd("balance", cmd_balance, "Monte Carlo balance test", ids=False, lock=False)
     p.add_argument("--set", action="append", metavar="ID.field=value", help="what-if override (repeatable)")
     p.add_argument("--matches", type=int, default=20000)
